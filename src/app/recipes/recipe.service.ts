@@ -1,7 +1,9 @@
-import { EventEmitter } from "@angular/core";
+import { EventEmitter, Injectable } from "@angular/core";
 import { Ingredient } from "../shared/ingredient.model";
+import { ShoppingListService } from "../shopping-list/shopping-list.service";
 import { Recipe } from "./recipe.model";
 
+@Injectable()
 export class RecipeService {
     recipeSelected = new EventEmitter<Recipe>();
 
@@ -29,9 +31,15 @@ export class RecipeService {
             ]),
     ];
 
+    constructor(private shoppingListService: ShoppingListService) {}
+
     getRecipes() {
         // without slice it will return the reference to this original array.
         // with slice it will return new copy of this array. So changes don't mess up with original array.
         return this.recipes.slice();
     };
+
+    addIngredientsToShoppingList(ingredients: Ingredient[]) {
+        this.shoppingListService.addIngredients(ingredients);
+    }
 }
