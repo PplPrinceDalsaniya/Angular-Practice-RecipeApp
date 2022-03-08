@@ -1,13 +1,8 @@
 <div class="row">
-    <div class="col-md-4 bg-secondary">
+    <div class="col-md-4">
         <app-recipes-list></app-recipes-list>
     </div>
-    <div class="col-md-8 bg-success">
-        <app-recipes-detail
-            *ngIf="selectedRecipe; else infoText"
-            [recipe]="selectedRecipe"></app-recipes-detail>
-        <ng-template #infoText>
-            <p>Please Select a Recipe!</p>
-        </ng-template>
+    <div class="col-md-8">
+        <router-outlet></router-outlet>
     </div>
 </div>
