@@ -9,9 +9,11 @@ import { ShoppingListService } from '../shopping-list.service';
   styleUrls: ['./shopping-edit.component.css']
 })
 export class ShoppingEditComponent implements OnInit, OnDestroy {
+  @ViewChild('f') slForm: NgForm;
   subscription: Subscription;
-  eidtMode = false;
+  wditMode = false;
   editedIngIndex: number;
+  editedIng: Ingredient;
 
   constructor(private shoppingListService: ShoppingListService) { }
 
@@ -19,8 +21,13 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     this.subscription = this.shoppingListService.startedEditing
       .subscribe(
         (ingId: number) => {
-          this.eidtMode = true;
+          this.wditMode = true;
           this.editedIngIndex = ingId;
+          this.editedIng = this.shoppingListService.getIngredient(ingId);
+          this.slForm.setValue({
+            name: this.editedIng.name,
+            quentity: this.editedIng.quentity
+          })
         }
       );
   }
