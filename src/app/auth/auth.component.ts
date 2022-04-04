@@ -5,5 +5,9 @@ import { Component } from "@angular/core";
     templateUrl: './auth.component.html'
 })
 export class AuthComponent {
+    isLoggedIn: boolean = false;
 
+    onSwithMode() {
+        this.isLoggedIn = !this.isLoggedIn;
+    }
 }
