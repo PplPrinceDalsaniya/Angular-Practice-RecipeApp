@@ -25,6 +25,18 @@ export class AuthService {
         private router: Router
     ){}
 
+    autoLogin() {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (!userData) {
+            return; 
+        }
+        const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
+
+        if (loadedUser.token) {
+            this.user.next(loadedUser);
+        }
+    }
+
     signUp(email: string, password: string) {
         return this.http.post<AuthResponseData>("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCM-6RoM3JzmqC2xqiEGc1jodgP4jRMgMw", 
         {
@@ -97,5 +109,6 @@ export class AuthService {
         const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
         const user = new User(email, userID, token, expirationDate);
         this.user.next(user);
+        localStorage.setItem('userData', JSON.stringify(user));
     }
 }
