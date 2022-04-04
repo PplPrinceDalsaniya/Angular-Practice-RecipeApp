@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'recipeApp';
+  loadedSection = 'recipes';
+
+  onSelection(section: string) {
+    this.loadedSection = section;
+  }
 }

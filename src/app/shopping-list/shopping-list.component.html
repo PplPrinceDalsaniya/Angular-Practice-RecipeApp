@@ -1,0 +1,15 @@
+<div class="row bg-secondary">
+    <div class="col-xs-10">
+        <app-shopping-edit></app-shopping-edit>
+        <hr>
+        <div class="list-group">
+            <a 
+                class="list-group-item list-group-item-action" 
+                *ngFor="let ingredient of ingredients; let i = index"
+                (click)="onEditIngredient(i)"
+            >
+                {{ ingredient.name }}<span class="badge bg-primary rounded-pill ms-2"> {{ ingredient.quentity }} </span>
+            </a>
+        </div>
+    </div>
+</div>
