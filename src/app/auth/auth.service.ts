@@ -3,12 +3,13 @@ import { Injectable } from "@angular/core";
 import { throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 
-interface AuthResponseData {
+export interface AuthResponseData {
     idToken: string;
     email: string;
     refreshToken: string;
     expiresIn: string;
     localId: string;
+    registered?: string;
 }
 
 @Injectable({
@@ -38,6 +39,33 @@ export class AuthService {
                         break;
                     case "TOO_MANY_ATTEMPTS_TRY_LATER":
                         errorMsg = "We have blocked all requests from this device due to unusual activity. Try again later.";
+                        break;
+                }
+                return throwError(errorMsg);
+            })
+        );
+    }
+
+    login(email: string, password: string) {
+        return this.http.post<AuthResponseData>("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCM-6RoM3JzmqC2xqiEGc1jodgP4jRMgMw", {
+            email: email,
+            password: password,
+            returnSecureToken: true
+        }).pipe(
+            catchError(errorRes => {
+                let errorMsg = "An unknown error occured!";
+                if (!errorRes.error || !errorRes.error.error) {
+                    return throwError(errorMsg);
+                }
+                switch (errorRes.error.error.message) {
+                    case "EMAIL_NOT_FOUND":
+                        errorMsg = "There is no user record corresponding to this identifier. The user may have been deleted.";
+                        break;
+                    case "INVALID_PASSWORD":
+                        errorMsg = "The password is invalid or the user does not have a password.";
+                        break;
+                    case "USER_DISABLED":
+                        errorMsg = "The user account has been disabled by an administrator.";
                         break;
                 }
                 return throwError(errorMsg);
