@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, ComponentFactoryResolver } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
+import { AlertComponent } from "../shared/alert/alert.component";
 import { AuthResponseData, AuthService } from "./auth.service";
 
 @Component ({
@@ -15,7 +16,8 @@ export class AuthComponent {
 
     constructor ( 
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private cpr: ComponentFactoryResolver
     ){}
 
     onSwithMode() {
@@ -46,6 +48,7 @@ export class AuthComponent {
             errorMsg => {
                 console.log(errorMsg);
                 this.error = errorMsg;
+                this.showErrorAlert(errorMsg);
                 this.isLoading = false;
             }
         );
@@ -55,5 +58,10 @@ export class AuthComponent {
 
     onHandleError() {
         this.error = null;
+    }
+
+    showErrorAlert(errorMessage: string) {
+        const alertComponentFactory = this.cpr.resolveComponentFactory(AlertComponent);
+        
     }
 }
